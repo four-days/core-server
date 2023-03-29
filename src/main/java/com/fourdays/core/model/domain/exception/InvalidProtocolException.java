@@ -1,4 +1,4 @@
-package com.fourdays.core.domain.exception;
+package com.fourdays.core.model.domain.exception;
 
 public class InvalidProtocolException extends InvalidException {
 
