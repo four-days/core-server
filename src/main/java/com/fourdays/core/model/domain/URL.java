@@ -1,9 +1,6 @@
-package com.fourdays.core.domain;
+package com.fourdays.core.model.domain;
 
-import com.fourdays.core.domain.exception.InvalidDomainException;
-import com.fourdays.core.domain.exception.InvalidPathException;
-import com.fourdays.core.domain.exception.InvalidPortException;
-import com.fourdays.core.domain.exception.InvalidProtocolException;
+import com.fourdays.core.model.domain.exception.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
@@ -12,6 +9,8 @@ import java.util.Optional;
 
 @Getter
 public class URL {
+
+    private Long seq;
 
     private final String protocol;
 
@@ -23,18 +22,21 @@ public class URL {
 
     private final String original;
 
+    private final String urlKey;
+
     @Builder
-    public URL(String protocol, String domain, Integer port, String path) {
+    public URL(String protocol, String domain, Integer port, String path, String urlKey) {
         this.protocol = protocol;
         this.domain = domain;
         this.port = port != null ? port : getPortByProtocol();
         this.path = Optional.ofNullable(path);
+        this.urlKey = urlKey;
+        this.original = createOriginal(protocol, domain, port, path);
 
         validateData();
-        this.original = createOriginal(protocol, domain, port, path);
     }
 
-    public URL(String original) {
+    public URL(String original, String urlKey) {
         String[] protocolAndRest = original.split("://");
         this.protocol = protocolAndRest[0];
 
@@ -66,8 +68,14 @@ public class URL {
             this.path = Optional.empty();
         }
 
-        validateData();
+        this.urlKey = urlKey;
         this.original = original;
+
+        validateData();
+    }
+
+    public void changeSeq(Long seq) {
+        this.seq = seq;
     }
 
     private void validateData() {
@@ -75,6 +83,7 @@ public class URL {
         validateDomain();
         validatePort();
         validatePath();
+        validateUrlKey();
     }
 
     private void validateProtocol() {
@@ -107,6 +116,14 @@ public class URL {
         }
 
         throw new InvalidPathException("path is invalid. path=" + this.path.get());
+    }
+
+    private void validateUrlKey() {
+        if (StringUtils.hasText(this.urlKey) && !urlKey.contains("/") && !urlKey.contains("=") && !urlKey.contains("+")) {
+            return;
+        }
+
+        throw new InvalidUrlKeyException("urlKey is invalid. urlKey=" + this.urlKey);
     }
 
     private String createOriginal(String protocol, String domain, Integer port, String path) {
