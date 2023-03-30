@@ -1,6 +1,6 @@
-package com.fourdays.core.model.domain;
+package com.fourdays.core.model.domain.url.entity;
 
-import com.fourdays.core.model.domain.exception.*;
+import com.fourdays.core.model.domain.url.entity.exception.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
@@ -21,6 +21,7 @@ public class URL {
     private final Optional<String> path;
 
     private final String original;
+
 
     @Builder
     public URL(String urlKey, String protocol, String domain, Integer port, String path) {
