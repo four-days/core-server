@@ -1,8 +1,8 @@
-package com.fourdays.core.domain;
+package com.fourdays.core.model.domain.url.entity;
 
 import com.fourdays.core.common.util.Base62Encoder;
-import com.fourdays.core.model.domain.URL;
-import com.fourdays.core.model.domain.exception.*;
+import com.fourdays.core.model.domain.url.entity.URL;
+import com.fourdays.core.model.domain.url.entity.exception.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +16,11 @@ class URLTest {
     void constructorTest_parameters_portExists() {
         String urlKey = Base62Encoder.encode(System.nanoTime());
         URL url = URL.builder()
+                .urlKey(urlKey)
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
-                .urlKey(urlKey)
                 .build();
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
@@ -35,11 +35,11 @@ class URLTest {
     void constructorTest_parameters_portNotExists() {
         String urlKey = Base62Encoder.encode(System.nanoTime());
         URL url = URL.builder()
+                .urlKey(urlKey)
                 .protocol("https")
                 .domain("four.days")
                 .port(null)
                 .path("/")
-                .urlKey(urlKey)
                 .build();
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
@@ -54,11 +54,11 @@ class URLTest {
     void constructorTest_parameters_pathExists() {
         String urlKey = Base62Encoder.encode(System.nanoTime());
         URL url = URL.builder()
+                .urlKey(urlKey)
                 .protocol("https")
                 .domain("four.days")
                 .port(null)
                 .path("/")
-                .urlKey(urlKey)
                 .build();
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
@@ -73,11 +73,11 @@ class URLTest {
     void constructorTest_parameters_pathNotExists() {
         String urlKey = Base62Encoder.encode(System.nanoTime());
         URL url = URL.builder()
+                .urlKey(urlKey)
                 .protocol("https")
                 .domain("four.days")
                 .port(null)
                 .path(null)
-                .urlKey(urlKey)
                 .build();
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
@@ -224,11 +224,11 @@ class URLTest {
     @DisplayName("constructor > parameter > urlKey is null")
     void constructorTest_parameter_urlKeyIsNull() {
         assertThatThrownBy(() -> URL.builder()
+                .urlKey(null)
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
-                .urlKey(null)
                 .build())
                 .isInstanceOf(InvalidUrlKeyException.class)
                 .hasMessage("urlKey is invalid. urlKey=null");
@@ -246,11 +246,11 @@ class URLTest {
     @DisplayName("constructor > parameter > urlKey contains '/'")
     void constructorTest_parameter_urlKeyContainsSlash() {
         assertThatThrownBy(() -> URL.builder()
+                .urlKey("ABCD/EFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
-                .urlKey("ABCD/EFG")
                 .build())
                 .isInstanceOf(InvalidUrlKeyException.class)
                 .hasMessage("urlKey is invalid. urlKey=ABCD/EFG");
@@ -268,11 +268,11 @@ class URLTest {
     @DisplayName("constructor > parameter > urlKey contains '+'")
     void constructorTest_parameter_urlKeyContainsPlus() {
         assertThatThrownBy(() -> URL.builder()
+                .urlKey("ABCD+EFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
-                .urlKey("ABCD+EFG")
                 .build())
                 .isInstanceOf(InvalidUrlKeyException.class)
                 .hasMessage("urlKey is invalid. urlKey=ABCD+EFG");
@@ -290,11 +290,11 @@ class URLTest {
     @DisplayName("constructor > parameter > urlKey contains '='")
     void constructorTest_parameter_urlKeyContainsEqual() {
         assertThatThrownBy(() -> URL.builder()
+                .urlKey("ABCD=EFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
-                .urlKey("ABCD=EFG")
                 .build())
                 .isInstanceOf(InvalidUrlKeyException.class)
                 .hasMessage("urlKey is invalid. urlKey=ABCD=EFG");

@@ -1,4 +1,4 @@
-package com.fourdays.core.model.domain.exception;
+package com.fourdays.core.model.domain.url.entity.exception;
 
 public class InvalidPathException extends InvalidException {
 
