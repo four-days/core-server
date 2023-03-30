@@ -10,7 +10,7 @@ import java.util.Optional;
 @Getter
 public class URL {
 
-    private Long seq;
+    private final String urlKey;
 
     private final String protocol;
 
@@ -22,10 +22,8 @@ public class URL {
 
     private final String original;
 
-    private final String urlKey;
-
     @Builder
-    public URL(String protocol, String domain, Integer port, String path, String urlKey) {
+    public URL(String urlKey, String protocol, String domain, Integer port, String path) {
         this.protocol = protocol;
         this.domain = domain;
         this.port = port != null ? port : getPortByProtocol();
@@ -36,7 +34,9 @@ public class URL {
         validateData();
     }
 
-    public URL(String original, String urlKey) {
+    public URL(String urlKey, String original) {
+        this.urlKey = urlKey;
+
         String[] protocolAndRest = original.split("://");
         this.protocol = protocolAndRest[0];
 
@@ -68,14 +68,8 @@ public class URL {
             this.path = Optional.empty();
         }
 
-        this.urlKey = urlKey;
         this.original = original;
-
         validateData();
-    }
-
-    public void changeSeq(Long seq) {
-        this.seq = seq;
     }
 
     private void validateData() {
