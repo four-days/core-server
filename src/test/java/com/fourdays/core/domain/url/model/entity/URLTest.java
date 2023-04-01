@@ -1,6 +1,5 @@
 package com.fourdays.core.domain.url.model.entity;
 
-import com.fourdays.core.common.util.Base62Encoder;
 import com.fourdays.core.domain.url.model.entity.exception.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,86 +9,87 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class URLTest {
 
+
     @Test
     @DisplayName("constructor > parameters > port exists")
     void constructorTest_parameters_portExists() {
-        String urlKey = Base62Encoder.encode(System.nanoTime());
         URL url = URL.builder()
-                .urlKey(urlKey)
+                .urlKey("ABCDEFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
                 .build();
+
+        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(443);
         assertThat(url.getPath().orElseGet(() -> null)).isEqualTo("/");
         assertThat(url.getOriginal()).isEqualTo("https://four.days:443/");
-        assertThat(url.getUrlKey()).isEqualTo(urlKey);
     }
 
     @Test
     @DisplayName("constructor > parameters > port not exists")
     void constructorTest_parameters_portNotExists() {
-        String urlKey = Base62Encoder.encode(System.nanoTime());
         URL url = URL.builder()
-                .urlKey(urlKey)
+                .urlKey("ABCDEFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(null)
                 .path("/")
                 .build();
+
+        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(443);
         assertThat(url.getPath().orElseGet(() -> null)).isEqualTo("/");
         assertThat(url.getOriginal()).isEqualTo("https://four.days/");
-        assertThat(url.getUrlKey()).isEqualTo(urlKey);
     }
 
     @Test
     @DisplayName("constructor > parameters > path exists")
     void constructorTest_parameters_pathExists() {
-        String urlKey = Base62Encoder.encode(System.nanoTime());
         URL url = URL.builder()
-                .urlKey(urlKey)
+                .urlKey("ABCDEFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(null)
                 .path("/")
                 .build();
+
+        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(443);
         assertThat(url.getPath().orElseGet(() -> null)).isEqualTo("/");
         assertThat(url.getOriginal()).isEqualTo("https://four.days/");
-        assertThat(url.getUrlKey()).isEqualTo(urlKey);
     }
 
     @Test
     @DisplayName("constructor > parameters > path not exists")
     void constructorTest_parameters_pathNotExists() {
-        String urlKey = Base62Encoder.encode(System.nanoTime());
         URL url = URL.builder()
-                .urlKey(urlKey)
+                .urlKey("ABCDEFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(null)
                 .path(null)
                 .build();
+
+        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(443);
         assertThat(url.getPath()).isEmpty();
         assertThat(url.getOriginal()).isEqualTo("https://four.days");
-        assertThat(url.getUrlKey()).isEqualTo(urlKey);
     }
 
     @Test
     @DisplayName("constructor > parameters > protocol is null")
     void constructorTest_parameters_protocolIsNull() {
-        assertThatThrownBy(() -> new URL(Base62Encoder.encode(1L), null, "four.days", 80, "/"))
+        assertThatThrownBy(() -> new URL("ABCDEFG", null, "four.days", 80, "/"))
                 .isInstanceOf(InvalidProtocolException.class)
                 .hasMessage("protocol is invalid. protocol=" + null);
     }
@@ -97,7 +97,7 @@ class URLTest {
     @Test
     @DisplayName("constructor > parameters > protocol is invalid")
     void constructorTest_parameters_protocolIsInvalid() {
-        assertThatThrownBy(() -> new URL(Base62Encoder.encode(1L), "ftp", "four.days", 80, "/"))
+        assertThatThrownBy(() -> new URL("ABCDEFG", "ftp", "four.days", 80, "/"))
                 .isInstanceOf(InvalidProtocolException.class)
                 .hasMessage("protocol is invalid. protocol=" + "ftp");
     }
@@ -105,7 +105,7 @@ class URLTest {
     @Test
     @DisplayName("constructor > parameters > domain is null")
     void constructorTest_parameters_domainIsNull() {
-        assertThatThrownBy(() -> new URL(Base62Encoder.encode(1L), "http", null, 80, "/"))
+        assertThatThrownBy(() -> new URL("ABCDEFG", "http", null, 80, "/"))
                 .isInstanceOf(InvalidDomainException.class)
                 .hasMessage("domain is invalid. domain=" + null);
     }
@@ -113,7 +113,7 @@ class URLTest {
     @Test
     @DisplayName("constructor > parameters > port is negative")
     void constructorTest_parameters_portIsNegative() {
-        assertThatThrownBy(() -> new URL(Base62Encoder.encode(1L), "http", "four.days", -1, "/"))
+        assertThatThrownBy(() -> new URL("ABCDEFG", "http", "four.days", -1, "/"))
                 .isInstanceOf(InvalidPortException.class)
                 .hasMessage("port is invalid. port=" + -1);
     }
@@ -121,7 +121,7 @@ class URLTest {
     @Test
     @DisplayName("constructor > parameters > path is invalid")
     void constructorTest_parameters_pathIsInvalid() {
-        assertThatThrownBy(() -> new URL(Base62Encoder.encode(1L), "http", "four.days", 80, "invalidString"))
+        assertThatThrownBy(() -> new URL("ABCDEFG", "http", "four.days", 80, "invalidString"))
                 .isInstanceOf(InvalidPathException.class)
                 .hasMessage("path is invalid. path=" + "invalidString");
     }
@@ -129,68 +129,66 @@ class URLTest {
     @Test
     @DisplayName("constructor > originalString > port exists")
     void constructorTest_originalString_portExists() {
-        String urlKey = Base62Encoder.encode(System.nanoTime());
-        URL url = new URL(urlKey, "http://four.days:8080/");
+        URL url = new URL("ABCDEFG", "http://four.days:8080/");
+
+        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("http");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(8080);
         assertThat(url.getPath().orElseGet(() -> null)).isEqualTo("/");
         assertThat(url.getOriginal()).isEqualTo("http://four.days:8080/");
-        assertThat(url.getUrlKey()).isEqualTo(urlKey);
     }
 
     @Test
     @DisplayName("constructor > originalString > port not exists")
     void constructorTest_originalString_portNotExists() {
-        String urlKey1 = Base62Encoder.encode(System.nanoTime());
-        URL httpUrl = new URL(urlKey1, "http://four.days/");
+        URL httpUrl = new URL("ABCDEFG1", "http://four.days/");
+        assertThat(httpUrl.getUrlKey()).isEqualTo("ABCDEFG1");
         assertThat(httpUrl.getProtocol()).isEqualTo("http");
         assertThat(httpUrl.getDomain()).isEqualTo("four.days");
         assertThat(httpUrl.getPort()).isEqualTo(80);
         assertThat(httpUrl.getPath().orElseGet(() -> null)).isEqualTo("/");
         assertThat(httpUrl.getOriginal()).isEqualTo("http://four.days/");
-        assertThat(httpUrl.getUrlKey()).isEqualTo(urlKey1);
 
-        String urlKey2 = Base62Encoder.encode(System.nanoTime());
-        URL httpsUrl = new URL(urlKey2, "https://four.days/");
+        URL httpsUrl = new URL("ABCDEFG2", "https://four.days/");
+        assertThat(httpsUrl.getUrlKey()).isEqualTo("ABCDEFG2");
         assertThat(httpsUrl.getProtocol()).isEqualTo("https");
         assertThat(httpsUrl.getDomain()).isEqualTo("four.days");
         assertThat(httpsUrl.getPort()).isEqualTo(443);
         assertThat(httpsUrl.getPath().orElseGet(() -> null)).isEqualTo("/");
         assertThat(httpsUrl.getOriginal()).isEqualTo("https://four.days/");
-        assertThat(httpsUrl.getUrlKey()).isEqualTo(urlKey2);
     }
 
     @Test
     @DisplayName("constructor > originalString > path exists")
     void constructorTest_originalString_pathExists() {
-        String urlKey = Base62Encoder.encode(System.nanoTime());
-        URL url = new URL(urlKey, "http://four.days/");
+        URL url = new URL("ABCDEFG", "http://four.days/");
+
+        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("http");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(80);
         assertThat(url.getPath().orElseGet(() -> null)).isEqualTo("/");
         assertThat(url.getOriginal()).isEqualTo("http://four.days/");
-        assertThat(url.getUrlKey()).isEqualTo(urlKey);
     }
 
     @Test
     @DisplayName("constructor > originalString > path not exists")
     void constructorTest_originalString_pathNotExists() {
-        String urlKey = Base62Encoder.encode(System.nanoTime());
-        URL url = new URL(urlKey, "http://four.days");
+        URL url = new URL("ABCDEFG", "http://four.days");
+
         assertThat(url.getProtocol()).isEqualTo("http");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(80);
         assertThat(url.getPath()).isEmpty();
         assertThat(url.getOriginal()).isEqualTo("http://four.days");
-        assertThat(url.getUrlKey()).isEqualTo(urlKey);
+        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
     }
 
     @Test
     @DisplayName("constructor > originalString > protocol is null")
     void constructorTest_originalString_protocolIsNull() {
-        assertThatThrownBy(() -> new URL(Base62Encoder.encode(1L), "://four.days:-1/"))
+        assertThatThrownBy(() -> new URL("ABCDEFG", "://four.days:-1/"))
                 .isInstanceOf(InvalidProtocolException.class)
                 .hasMessage("protocol is invalid. protocol=" + "");
     }
@@ -198,7 +196,7 @@ class URLTest {
     @Test
     @DisplayName("constructor > originalString > protocol is invalid")
     void constructorTest_originalString_protocolIsInvalid() {
-        assertThatThrownBy(() -> new URL(Base62Encoder.encode(1L), "ftp://four.days:80/"))
+        assertThatThrownBy(() -> new URL("ABCDEFG", "ftp://four.days:80/"))
                 .isInstanceOf(InvalidProtocolException.class)
                 .hasMessage("protocol is invalid. protocol=" + "ftp");
     }
@@ -206,7 +204,7 @@ class URLTest {
     @Test
     @DisplayName("constructor > originalString > domain is null")
     void constructorTest_originalString_domainIsNull() {
-        assertThatThrownBy(() -> new URL(Base62Encoder.encode(1L), "http://"))
+        assertThatThrownBy(() -> new URL("ABCDEFG", "http://"))
                 .isInstanceOf(InvalidDomainException.class)
                 .hasMessage("domain is empty");
     }
@@ -214,7 +212,7 @@ class URLTest {
     @Test
     @DisplayName("constructor > originalString > port is negative")
     void constructorTest_originalString_portIsNegative() {
-        assertThatThrownBy(() -> new URL(Base62Encoder.encode(1L), "http://four.days:-1/"))
+        assertThatThrownBy(() -> new URL("ABCDEFG", "http://four.days:-1/"))
                 .isInstanceOf(InvalidPortException.class)
                 .hasMessage("port is invalid. port=" + -1);
     }

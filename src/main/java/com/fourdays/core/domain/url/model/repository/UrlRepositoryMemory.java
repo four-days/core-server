@@ -2,12 +2,14 @@ package com.fourdays.core.domain.url.model.repository;
 
 import com.fourdays.core.domain.url.model.entity.URL;
 import com.fourdays.core.domain.url.model.entity.exception.InvalidUrlKeyException;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 public class UrlRepositoryMemory implements UrlRepository {
 
     private static final Map<String, URL> store = new HashMap<>();
