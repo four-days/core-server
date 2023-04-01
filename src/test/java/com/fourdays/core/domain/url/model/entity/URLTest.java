@@ -1,8 +1,7 @@
-package com.fourdays.core.model.domain.url.entity;
+package com.fourdays.core.domain.url.model.entity;
 
 import com.fourdays.core.common.util.Base62Encoder;
-import com.fourdays.core.model.domain.url.entity.URL;
-import com.fourdays.core.model.domain.url.entity.exception.*;
+import com.fourdays.core.domain.url.model.entity.exception.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

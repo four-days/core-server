@@ -1,6 +1,6 @@
-package com.fourdays.core.model.domain.url.entity;
+package com.fourdays.core.domain.url.model.entity;
 
-import com.fourdays.core.model.domain.url.entity.exception.*;
+import com.fourdays.core.domain.url.model.entity.exception.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
