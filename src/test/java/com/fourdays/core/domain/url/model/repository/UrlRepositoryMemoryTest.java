@@ -40,7 +40,7 @@ class UrlRepositoryMemoryTest {
     @DisplayName("save > urlKey is null")
     void saveTest_urlKeyIsNull() throws IllegalAccessException, NoSuchFieldException {
         URL url = URL.builder()
-                .urlKey("temp")
+                .urlKey("null")
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
