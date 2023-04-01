@@ -1,6 +1,6 @@
-package com.fourdays.core.model.domain.url.repository;
+package com.fourdays.core.domain.url.model.repository;
 
-import com.fourdays.core.model.domain.url.entity.URL;
+import com.fourdays.core.domain.url.model.entity.URL;
 
 import java.util.Optional;
 

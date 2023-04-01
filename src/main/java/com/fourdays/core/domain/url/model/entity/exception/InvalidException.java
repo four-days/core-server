@@ -1,4 +1,4 @@
-package com.fourdays.core.model.domain.url.entity.exception;
+package com.fourdays.core.domain.url.model.entity.exception;
 
 public class InvalidException extends RuntimeException {
 
