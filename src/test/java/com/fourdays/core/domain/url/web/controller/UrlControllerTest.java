@@ -1,10 +1,6 @@
 package com.fourdays.core.domain.url.web.controller;
 
-import com.fourdays.core.common.response.BasicResponse;
 import com.fourdays.core.domain.url.model.service.UrlService;
-import com.fourdays.core.domain.url.web.controller.dto.request.ShortenUrlDto;
-import com.fourdays.core.domain.url.web.controller.dto.response.UrlKeyDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +17,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,16 +39,6 @@ class UrlControllerTest {
                 .addFilter(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true))
                 .alwaysDo(MockMvcResultHandlers.print())
                 .build();
-    }
-
-    @Test
-    @DisplayName("shortenUrl > urlKeyCheck")
-    void shortenUrlTest_success() {
-        UrlController urlController = new UrlController(url -> "urlKey");
-        BasicResponse<UrlKeyDto> basicResponse = urlController.shortenUrl(new ShortenUrlDto("https://four.days/"));
-        UrlKeyDto urlKeyDto = basicResponse.getData();
-        String urlKey = urlKeyDto.getUrlKey();
-        Assertions.assertThat(urlKey).isEqualTo("urlKey");
     }
 
     @Test
@@ -156,5 +143,157 @@ class UrlControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.data.fieldError.field").value("url"))
                 .andExpect(jsonPath("$.data.fieldError.message").value("invalid url"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > exists")
+    void findOriginalUrlByUrlKeyTest_exists() throws Exception {
+        Mockito.when(urlService.findOriginalUrlByUrlKey("urlKey12")).thenReturn("https://four.days/");
+        mvc.perform(get("/api/v1/urls/urlKey12")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.url").value("https://four.days/"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > not exists")
+    void findOriginalUrlByUrlKeyTest_notExists() throws Exception {
+        mvc.perform(get("/api/v1/urls/urlKey12")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 1")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs1() throws Exception {
+        mvc.perform(get("/api/v1/urls/1")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("1"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 2")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs2() throws Exception {
+        mvc.perform(get("/api/v1/urls/12")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("12"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 3")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs3() throws Exception {
+        mvc.perform(get("/api/v1/urls/123")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("123"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 4")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs4() throws Exception {
+        mvc.perform(get("/api/v1/urls/1234")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("1234"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 5")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs5() throws Exception {
+        mvc.perform(get("/api/v1/urls/12345")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("12345"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 6")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs6() throws Exception {
+        mvc.perform(get("/api/v1/urls/123456")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("123456"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 7")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs7() throws Exception {
+        mvc.perform(get("/api/v1/urls/1234567")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("1234567"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 9")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs9() throws Exception {
+        mvc.perform(get("/api/v1/urls/123456789")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("123456789"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > invalid word 1")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_invalidWord1() throws Exception {
+        mvc.perform(get("/api/v1/urls/1234567-")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("1234567-"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > invalid word 2")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_invalidWord2() throws Exception {
+        mvc.perform(get("/api/v1/urls/1234567+")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("1234567+"));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > invalid word 3")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_invalidWord3() throws Exception {
+        mvc.perform(get("/api/v1/urls/1234567=")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("1234567="));
+    }
+
+    @Test
+    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > invalid word 4")
+    void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_invalidWord4() throws Exception {
+        mvc.perform(get("/api/v1/urls/1234567\\")
+        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
+                .andExpect(jsonPath("$.data[0].invalidValue").value("1234567\\"));
     }
 }
