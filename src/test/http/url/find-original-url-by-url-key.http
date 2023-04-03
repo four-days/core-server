@@ -1,0 +1,13 @@
+### save
+POST http://localhost:8080/api/v1/urls
+Content-Type: application/json
+
+{
+  "url": "https://four.days"
+}
+
+### success
+GET http://localhost:8080/api/v1/urls/f6E7cp891
+
+### no data
+GET http://localhost:8080/api/v1/urls/1
