@@ -12,7 +12,11 @@ import java.util.Optional;
 @Repository
 public class UrlRepositoryMemory implements UrlRepository {
 
-    private static final Map<String, URL> store = new HashMap<>();
+    private final Map<String, URL> store;
+
+    public UrlRepositoryMemory() {
+        this.store = new HashMap<>();
+    }
 
     @Override
     public URL save(URL url) {
