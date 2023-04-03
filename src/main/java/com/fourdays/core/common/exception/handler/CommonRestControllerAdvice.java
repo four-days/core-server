@@ -3,6 +3,7 @@ package com.fourdays.core.common.exception.handler;
 import com.fourdays.core.common.response.ErrorResponse;
 import com.fourdays.core.domain.url.model.entity.exception.InvalidException;
 import com.fourdays.core.domain.url.model.entity.exception.InvalidPathException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -43,6 +46,21 @@ public class CommonRestControllerAdvice {
                 .data(data)
                 .build();
     }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ErrorResponse<List<Map<String, Object>>> constraintViolationExceptionHandler(ConstraintViolationException e) {
+        List<Map<String, Object>> data = e.getConstraintViolations().stream()
+                .map(constraintViolation -> Map.of(
+                        "message", constraintViolation.getMessage(),
+                        "invalidValue", constraintViolation.getInvalidValue()))
+                .collect(Collectors.toList());
+
+        return ErrorResponse.<List<Map<String, Object>>>builder()
+                .data(data)
+                .build();
+    }
+
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(InvalidException.class)

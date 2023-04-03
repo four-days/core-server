@@ -20,4 +20,12 @@ public class UrlServiceImpl implements UrlService {
         return urlRepository.save(new URL(urlKey, originalUrl))
                 .getUrlKey();
     }
+
+    @Override
+    public String findOriginalUrlByUrlKey(String urlKey) {
+        URL findUrl = urlRepository.findByUrlKey(urlKey)
+                .orElse(null);
+
+        return findUrl == null ? null : findUrl.getOriginal();
+    }
 }
