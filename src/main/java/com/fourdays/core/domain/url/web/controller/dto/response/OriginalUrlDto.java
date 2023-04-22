@@ -1,11 +1,4 @@
 package com.fourdays.core.domain.url.web.controller.dto.response;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public class OriginalUrlDto {
-
-    private final String url;
+public record OriginalUrlDto(String url) {
 }
