@@ -7,12 +7,14 @@ import com.fourdays.core.domain.url.web.controller.dto.response.OriginalUrlDto;
 import com.fourdays.core.domain.url.web.controller.dto.response.UrlKeyDto;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.*;
 
+@Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +26,9 @@ public class UrlController {
     @ResponseStatus(CREATED)
     @PostMapping
     public BasicResponse<UrlKeyDto> shortenUrl(@Validated @RequestBody ShortenUrlDto shortenUrlDto) {
-        System.out.println("shortenUrlDto.getUrl() = " + shortenUrlDto.getUrl());
-        String urlKey = urlService.shortenUrl(shortenUrlDto.getUrl());
+        String url = shortenUrlDto.url();
+        log.info("url={}", url);
+        String urlKey = urlService.shortenUrl(url);
         return BasicResponse.<UrlKeyDto>builder()
                 .data(new UrlKeyDto(urlKey))
                 .build();
