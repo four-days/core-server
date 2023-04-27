@@ -42,7 +42,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("shortenUrl > api test > success")
+    @DisplayName("url 을 전달하면 url 이 단축된 urlKey 값이 반환된다.")
     void shortenUrlTest_apiTest_success() throws Exception {
         Mockito.when(urlService.shortenUrl("https://four.days/")).thenReturn("urlKey");
         mvc.perform(post("/api/v1/urls")
@@ -55,7 +55,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("shortenUrl > invalid url 1")
+    @DisplayName("http 또는 https protocol 을 사용해야 한다.")
     void shortenUrlTest_invalidUrl1() throws Exception {
         mvc.perform(post("/api/v1/urls")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -68,7 +68,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("shortenUrl > invalid url 2")
+    @DisplayName("유효한 domain 주소를 전달해야 한다.")
     void shortenUrlTest_invalidUrl2() throws Exception {
         mvc.perform(post("/api/v1/urls")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -81,7 +81,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("shortenUrl > invalid url 3")
+    @DisplayName("유효한 url 을 전달해야 한다. '://'")
     void shortenUrlTest_invalidUrl3() throws Exception {
         mvc.perform(post("/api/v1/urls")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("shortenUrl > invalid url 4")
+    @DisplayName("유효한 url 을 전달해야 한다. ':'")
     void shortenUrlTest_invalidUrl4() throws Exception {
         mvc.perform(post("/api/v1/urls")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +107,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("shortenUrl > invalid url 5")
+    @DisplayName("domain 주소를 전달해야 한다.")
     void shortenUrlTest_invalidUrl5() throws Exception {
         mvc.perform(post("/api/v1/urls")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -120,7 +120,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("shortenUrl > invalid url 6")
+    @DisplayName("빈 문자열이 아닌 url 을 전달해야 한다.")
     void shortenUrlTest_invalidUrl6() throws Exception {
         mvc.perform(post("/api/v1/urls")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -133,7 +133,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("shortenUrl > invalid url 7")
+    @DisplayName("url 을 전달해야 한다.")
     void shortenUrlTest_invalidUrl7() throws Exception {
         mvc.perform(post("/api/v1/urls")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -146,7 +146,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > exists")
+    @DisplayName("urlKey 로 원본 url 을 조회할 수 있다.")
     void findOriginalUrlByUrlKeyTest_exists() throws Exception {
         Mockito.when(urlService.findOriginalUrlByUrlKey("urlKey12")).thenReturn("https://four.days/");
         mvc.perform(get("/api/v1/urls/urlKey12")
@@ -157,7 +157,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > not exists")
+    @DisplayName("유효하지 않은 urlKey 로는 원본 url 을 조회할 수 없다.")
     void findOriginalUrlByUrlKeyTest_notExists() throws Exception {
         mvc.perform(get("/api/v1/urls/urlKey12")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -166,7 +166,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 1")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 1")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs1() throws Exception {
         mvc.perform(get("/api/v1/urls/1")
         .contentType(MediaType.APPLICATION_JSON)
@@ -177,7 +177,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 2")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 2")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs2() throws Exception {
         mvc.perform(get("/api/v1/urls/12")
         .contentType(MediaType.APPLICATION_JSON)
@@ -188,7 +188,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 3")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 3")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs3() throws Exception {
         mvc.perform(get("/api/v1/urls/123")
         .contentType(MediaType.APPLICATION_JSON)
@@ -199,7 +199,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 4")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 4")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs4() throws Exception {
         mvc.perform(get("/api/v1/urls/1234")
         .contentType(MediaType.APPLICATION_JSON)
@@ -210,7 +210,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 5")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 5")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs5() throws Exception {
         mvc.perform(get("/api/v1/urls/12345")
         .contentType(MediaType.APPLICATION_JSON)
@@ -221,7 +221,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 6")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 6")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs6() throws Exception {
         mvc.perform(get("/api/v1/urls/123456")
         .contentType(MediaType.APPLICATION_JSON)
@@ -232,7 +232,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 7")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 7")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs7() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567")
         .contentType(MediaType.APPLICATION_JSON)
@@ -243,7 +243,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > length is 9")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 9")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_lengthIs9() throws Exception {
         mvc.perform(get("/api/v1/urls/123456789")
         .contentType(MediaType.APPLICATION_JSON)
@@ -254,7 +254,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > invalid word 1")
+    @DisplayName("urlKey 는 알파벳, 숫자만 입력해야 한다. '-'")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_invalidWord1() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567-")
         .contentType(MediaType.APPLICATION_JSON)
@@ -265,7 +265,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > invalid word 2")
+    @DisplayName("urlKey 는 알파벳, 숫자만 입력해야 한다. '+'")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_invalidWord2() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567+")
         .contentType(MediaType.APPLICATION_JSON)
@@ -276,7 +276,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > invalid word 3")
+    @DisplayName("urlKey 는 알파벳, 숫자만 입력해야 한다. '='")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_invalidWord3() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567=")
         .contentType(MediaType.APPLICATION_JSON)
@@ -287,7 +287,7 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("findOriginalUrlByUrlKey > constraintViolationExceptionException > invalid word 4")
+    @DisplayName("urlKey 는 알파벳, 숫자만 입력해야 한다. '\\'")
     void findOriginalUrlByUrlKeyTest_constraintViolationExceptionException_invalidWord4() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567\\")
         .contentType(MediaType.APPLICATION_JSON)

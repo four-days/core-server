@@ -11,7 +11,7 @@ class URLTest {
 
 
     @Test
-    @DisplayName("constructor > parameters > port exists")
+    @DisplayName("port 를 지정해서 URL 객체를 생성할 수 있다.")
     void constructorTest_parameters_portExists() {
         URL url = URL.builder()
                 .urlKey("ABCDEFG")
@@ -30,7 +30,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameters > port not exists")
+    @DisplayName("port 가 없이 URL 객체를 생성할 수 있다.")
     void constructorTest_parameters_portNotExists() {
         URL url = URL.builder()
                 .urlKey("ABCDEFG")
@@ -49,7 +49,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameters > path exists")
+    @DisplayName("path 를 지정해서 URL 객체를 생성할 수 있다.")
     void constructorTest_parameters_pathExists() {
         URL url = URL.builder()
                 .urlKey("ABCDEFG")
@@ -68,7 +68,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameters > path not exists")
+    @DisplayName("path 가 없이 URL 객체를 생성할 수 있다.")
     void constructorTest_parameters_pathNotExists() {
         URL url = URL.builder()
                 .urlKey("ABCDEFG")
@@ -87,7 +87,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameters > protocol is null")
+    @DisplayName("protocol 없이 URL 객체를 생성할 수 없다.")
     void constructorTest_parameters_protocolIsNull() {
         assertThatThrownBy(() -> new URL("ABCDEFG", null, "four.days", 80, "/"))
                 .isInstanceOf(InvalidProtocolException.class)
@@ -95,7 +95,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameters > protocol is invalid")
+    @DisplayName("http 또는 https protocol 로만 URL 객체를 생성할 수 있다.")
     void constructorTest_parameters_protocolIsInvalid() {
         assertThatThrownBy(() -> new URL("ABCDEFG", "ftp", "four.days", 80, "/"))
                 .isInstanceOf(InvalidProtocolException.class)
@@ -103,7 +103,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameters > domain is null")
+    @DisplayName("domain 주소 없이 URL 객체를 생성할 수 없다.")
     void constructorTest_parameters_domainIsNull() {
         assertThatThrownBy(() -> new URL("ABCDEFG", "http", null, 80, "/"))
                 .isInstanceOf(InvalidDomainException.class)
@@ -111,7 +111,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameters > port is negative")
+    @DisplayName("port 를 입력할 경우 양수만 입력할 수 있다.")
     void constructorTest_parameters_portIsNegative() {
         assertThatThrownBy(() -> new URL("ABCDEFG", "http", "four.days", -1, "/"))
                 .isInstanceOf(InvalidPortException.class)
@@ -119,7 +119,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameters > path is invalid")
+    @DisplayName("path 는 존재하지 않거나 '/' 문자로 시작해야 한다.")
     void constructorTest_parameters_pathIsInvalid() {
         assertThatThrownBy(() -> new URL("ABCDEFG", "http", "four.days", 80, "invalidString"))
                 .isInstanceOf(InvalidPathException.class)
@@ -127,7 +127,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > port exists")
+    @DisplayName("port 를 지정해서 URL 객체를 생성할 수 있다.")
     void constructorTest_originalString_portExists() {
         URL url = new URL("ABCDEFG", "http://four.days:8080/");
 
@@ -140,7 +140,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > port not exists")
+    @DisplayName("port 가 없이 URL 객체를 생성할 수 있다.")
     void constructorTest_originalString_portNotExists() {
         URL httpUrl = new URL("ABCDEFG1", "http://four.days/");
         assertThat(httpUrl.getUrlKey()).isEqualTo("ABCDEFG1");
@@ -160,7 +160,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > path exists")
+    @DisplayName("path 를 지정해서 URL 객체를 생성할 수 있다.")
     void constructorTest_originalString_pathExists() {
         URL url = new URL("ABCDEFG", "http://four.days/");
 
@@ -173,7 +173,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > path not exists")
+    @DisplayName("path 가 없이 URL 객체를 생성할 수 있다.")
     void constructorTest_originalString_pathNotExists() {
         URL url = new URL("ABCDEFG", "http://four.days");
 
@@ -186,7 +186,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > protocol is null")
+    @DisplayName("protocol 없이 URL 객체를 생성할 수 없다.")
     void constructorTest_originalString_protocolIsNull() {
         assertThatThrownBy(() -> new URL("ABCDEFG", "://four.days:-1/"))
                 .isInstanceOf(InvalidProtocolException.class)
@@ -194,7 +194,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > protocol is invalid")
+    @DisplayName("http 또는 https protocol 로만 URL 객체를 생성할 수 있다.")
     void constructorTest_originalString_protocolIsInvalid() {
         assertThatThrownBy(() -> new URL("ABCDEFG", "ftp://four.days:80/"))
                 .isInstanceOf(InvalidProtocolException.class)
@@ -202,7 +202,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > domain is null")
+    @DisplayName("domain 주소 없이 URL 객체를 생성할 수 없다.")
     void constructorTest_originalString_domainIsNull() {
         assertThatThrownBy(() -> new URL("ABCDEFG", "http://"))
                 .isInstanceOf(InvalidDomainException.class)
@@ -210,7 +210,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > port is negative")
+    @DisplayName("port 를 입력할 경우 양수만 입력할 수 있다.")
     void constructorTest_originalString_portIsNegative() {
         assertThatThrownBy(() -> new URL("ABCDEFG", "http://four.days:-1/"))
                 .isInstanceOf(InvalidPortException.class)
@@ -218,7 +218,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameter > urlKey is null")
+    @DisplayName("urlKey 없이 URL 객체를 생성할 수 없다.")
     void constructorTest_parameter_urlKeyIsNull() {
         assertThatThrownBy(() -> URL.builder()
                 .urlKey(null)
@@ -232,7 +232,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > urlKey is null")
+    @DisplayName("urlKey 없이 URL 객체를 생성할 수 없다.")
     void constructorTest_originalString_urlKeyIsNull() {
         assertThatThrownBy(() -> new URL(null, "https://four.days:443/hello"))
                 .isInstanceOf(InvalidUrlKeyException.class)
@@ -240,7 +240,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameter > urlKey contains '/'")
+    @DisplayName("urlKey 는 '/' 문자를 포함할 수 없다.")
     void constructorTest_parameter_urlKeyContainsSlash() {
         assertThatThrownBy(() -> URL.builder()
                 .urlKey("ABCD/EFG")
@@ -254,7 +254,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > urlKey contains '/'")
+    @DisplayName("urlKey 는 '/' 문자를 포함할 수 없다.")
     void constructorTest_originalString_urlKeyContainsSlash() {
         assertThatThrownBy(() -> new URL("ABCD/EFG", "https://four.days:443/hello"))
                 .isInstanceOf(InvalidUrlKeyException.class)
@@ -262,7 +262,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameter > urlKey contains '+'")
+    @DisplayName("urlKey 는 '+' 문자를 포함할 수 없다.")
     void constructorTest_parameter_urlKeyContainsPlus() {
         assertThatThrownBy(() -> URL.builder()
                 .urlKey("ABCD+EFG")
@@ -276,7 +276,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > urlKey contains '+'")
+    @DisplayName("urlKey 는 '+' 문자를 포함할 수 없다.")
     void constructorTest_originalString_urlKeyContainsPlus() {
         assertThatThrownBy(() -> new URL("ABCD+EFG", "https://four.days:443/hello"))
                 .isInstanceOf(InvalidUrlKeyException.class)
@@ -284,7 +284,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > parameter > urlKey contains '='")
+    @DisplayName("urlKey 는 '=' 문자를 포함할 수 없다.")
     void constructorTest_parameter_urlKeyContainsEqual() {
         assertThatThrownBy(() -> URL.builder()
                 .urlKey("ABCD=EFG")
@@ -298,7 +298,7 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("constructor > originalString > urlKey contains '='")
+    @DisplayName("urlKey 는 '=' 문자를 포함할 수 없다.")
     void constructorTest_originalString_urlKeyContainsEqual() {
         assertThatThrownBy(() -> new URL("ABCD=EFG", "https://four.days:443/hello"))
                 .isInstanceOf(InvalidUrlKeyException.class)
