@@ -22,7 +22,7 @@ class UrlRepositoryMemoryTest {
     }
 
     @Test
-    @DisplayName("save > success")
+    @DisplayName("URL 객체를 저장한다.")
     void saveTest_success() {
         URL url = URL.builder()
                 .urlKey("ABCDEFG")
@@ -37,7 +37,7 @@ class UrlRepositoryMemoryTest {
     }
 
     @Test
-    @DisplayName("save > urlKey is null")
+    @DisplayName("urlKey 는 null 이어서는 안 된다.")
     void saveTest_urlKeyIsNull() throws IllegalAccessException, NoSuchFieldException {
         URL url = URL.builder()
                 .urlKey("null")
@@ -58,7 +58,7 @@ class UrlRepositoryMemoryTest {
     }
 
     @Test
-    @DisplayName("save > urlKey is \"\"")
+    @DisplayName("urlKey 는 빈 문자열이어서는 안 된다.")
     void saveTest_urlKeyIsEmpty() throws IllegalAccessException, NoSuchFieldException {
         URL url = URL.builder()
                 .urlKey("temp")
@@ -79,7 +79,7 @@ class UrlRepositoryMemoryTest {
     }
 
     @Test
-    @DisplayName("findByUrlKey > exists")
+    @DisplayName("urlKey 로 URL 객체를 조회할 수 있다.")
     void findByUrlKeyTest_exists() throws Exception {
         URL url = URL.builder()
                 .urlKey("key")
@@ -98,7 +98,7 @@ class UrlRepositoryMemoryTest {
     }
 
     @Test
-    @DisplayName("findByUrlKey > not exists")
+    @DisplayName("존재하지 않는 urlKey 로 URL 객체를 조회하면 빈 Optional 객체가 반환된다.")
     void findByUrlKeyTest_notExists() {
         Optional<URL> empty = urlRepository.findByUrlKey("none");
         assertThat(empty).isEmpty();
