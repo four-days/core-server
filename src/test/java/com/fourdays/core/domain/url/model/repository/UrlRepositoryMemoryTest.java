@@ -1,5 +1,6 @@
 package com.fourdays.core.domain.url.model.repository;
 
+import com.fourdays.core.domain.url.model.entity.Protocol;
 import com.fourdays.core.domain.url.model.entity.URL;
 import com.fourdays.core.domain.url.model.entity.exception.InvalidKeyException;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,9 +25,10 @@ class UrlRepositoryMemoryTest {
     @Test
     @DisplayName("URL 객체를 저장한다.")
     void saveTest_success() {
+        Protocol https = new Protocol(1, "HTTPS");
         URL url = URL.builder()
                 .key("ABCDEFG")
-                .protocol("https")
+                .protocol(https)
                 .domain("four.days")
                 .port(443)
                 .path("/")
@@ -39,9 +41,10 @@ class UrlRepositoryMemoryTest {
     @Test
     @DisplayName("key 는 null 이어서는 안 된다.")
     void saveTest_keyIsNull() throws IllegalAccessException, NoSuchFieldException {
+        Protocol https = new Protocol(1, "HTTPS");
         URL url = URL.builder()
                 .key("null")
-                .protocol("https")
+                .protocol(https)
                 .domain("four.days")
                 .port(443)
                 .path("/")
@@ -54,15 +57,16 @@ class UrlRepositoryMemoryTest {
 
         assertThatThrownBy(() -> urlRepository.save(url))
                 .isInstanceOf(InvalidKeyException.class)
-                .hasMessage("key is invalid. key=null");
+                .hasMessage("key is invalid. key=" + null);
     }
 
     @Test
     @DisplayName("key 는 빈 문자열이어서는 안 된다.")
     void saveTest_keyIsEmpty() throws IllegalAccessException, NoSuchFieldException {
+        Protocol https = new Protocol(1, "HTTPS");
         URL url = URL.builder()
                 .key("temp")
-                .protocol("https")
+                .protocol(https)
                 .domain("four.days")
                 .port(443)
                 .path("/")
@@ -81,9 +85,10 @@ class UrlRepositoryMemoryTest {
     @Test
     @DisplayName("key 로 URL 객체를 조회할 수 있다.")
     void findByKeyTest_exists() {
+        Protocol https = new Protocol(1, "HTTPS");
         URL url = URL.builder()
                 .key("key")
-                .protocol("https")
+                .protocol(https)
                 .domain("four.days")
                 .port(443)
                 .path("/")

@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Getter
 public class URL {
@@ -14,7 +17,7 @@ public class URL {
 
     private final String key;
 
-    private final String protocol;
+    private final Protocol protocol;
 
     private final String domain;
 
@@ -24,32 +27,33 @@ public class URL {
 
     private final String original;
 
+    private static final Set<String> possibleProtocols = new HashSet<>(List.of("HTTP", "HTTPS"));
+
 
     @Builder
-    public URL(String key, String protocol, String domain, Integer port, String path) {
+    public URL(String key, Protocol protocol, String domain, Integer port, String path) {
         this.protocol = protocol;
         this.domain = domain;
         this.port = port != null ? port : getPortByProtocol();
         this.path = Optional.ofNullable(path);
         this.key = key;
-        this.original = createOriginal(protocol, domain, port, path);
 
         validateData();
+        this.original = createOriginal();
     }
 
-    public URL(String key, String original) {
+    public URL(String key, Protocol protocol, String originalUrl) {
         this.key = key;
+        this.protocol = protocol;
 
-        String[] protocolAndRest = original.split("://");
-        this.protocol = protocolAndRest[0];
-
-        if (protocolAndRest.length == 1) {
-            throw new InvalidDomainException("domain is empty");
+        String[] split = originalUrl.split("://");
+        if (split.length != 2) {
+            throw new InvalidUrlException("url is invalid. url=" + originalUrl);
         }
 
-        int pathIndex = protocolAndRest[1].indexOf("/");
+        int pathIndex = split[1].indexOf("/");
 
-        String domainAndPort = pathIndex > 0 ? protocolAndRest[1].substring(0, pathIndex) : protocolAndRest[1];
+        String domainAndPort = pathIndex > 0 ? split[1].substring(0, pathIndex) : split[1];
         if (domainAndPort.contains(":")) {
             String[] tokens = domainAndPort.split(":");
             this.domain = tokens[0];
@@ -66,12 +70,12 @@ public class URL {
         }
 
         if (pathIndex > 0) {
-            this.path = Optional.of(protocolAndRest[1].substring(pathIndex));
+            this.path = Optional.of(split[1].substring(pathIndex));
         } else {
             this.path = Optional.empty();
         }
 
-        this.original = original;
+        this.original = originalUrl;
         validateData();
     }
 
@@ -84,11 +88,13 @@ public class URL {
     }
 
     private void validateProtocol() {
-        if ((isProtocolHttp() || isProtocolHttps())) {
-            return;
+        if (this.protocol == null) {
+            throw new InvalidProtocolException("protocol is null.");
         }
 
-        throw new InvalidProtocolException("protocol is invalid. protocol=" + this.protocol);
+        if (!possibleProtocols.contains(this.protocol.getName().toUpperCase())) {
+            throw new InvalidProtocolException("protocol is invalid. protocol=" + this.protocol);
+        }
     }
 
     private void validateDomain() {
@@ -123,12 +129,14 @@ public class URL {
         throw new InvalidKeyException("key is invalid. key=" + this.key);
     }
 
-    private String createOriginal(String protocol, String domain, Integer port, String path) {
-        return protocol +
-                "://" +
-                domain +
-                (port != null ? ":" + port : "") +
-                (path != null ? path : "");
+    private String createOriginal() {
+        StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder.append(this.protocol.getName().toLowerCase());
+        urlBuilder.append("://");
+        urlBuilder.append(this.domain);
+        urlBuilder.append(this.port != null ? ":" + this.port : "");
+        urlBuilder.append(this.path.orElse(""));
+        return urlBuilder.toString();
     }
 
     private Integer getPortByProtocol() {
@@ -142,10 +150,10 @@ public class URL {
     }
 
     private boolean isProtocolHttp() {
-        return "http".equals(this.protocol);
+        return this.protocol.isHttp();
     }
 
     private boolean isProtocolHttps() {
-        return "https".equals(this.protocol);
+        return this.protocol.isHttps();
     }
 }
