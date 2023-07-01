@@ -1,7 +1,7 @@
 package com.fourdays.core.domain.url.model.repository;
 
 import com.fourdays.core.domain.url.model.entity.URL;
-import com.fourdays.core.domain.url.model.entity.exception.InvalidUrlKeyException;
+import com.fourdays.core.domain.url.model.entity.exception.InvalidKeyException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -20,17 +20,17 @@ public class UrlRepositoryMemory implements UrlRepository {
 
     @Override
     public URL save(URL url) {
-        String urlKey = url.getUrlKey();
-        if (StringUtils.hasText(urlKey)) {
-            store.put(urlKey, url);
+        String key = url.getKey();
+        if (StringUtils.hasText(key)) {
+            store.put(key, url);
             return url;
         }
 
-        throw new InvalidUrlKeyException("urlKey is invalid. urlKey=" + urlKey);
+        throw new InvalidKeyException("key is invalid. key=" + key);
     }
 
     @Override
-    public Optional<URL> findByUrlKey(String urlKey) {
-        return Optional.ofNullable(store.get(urlKey));
+    public Optional<URL> findByKey(String key) {
+        return Optional.ofNullable(store.get(key));
     }
 }

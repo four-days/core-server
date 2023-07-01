@@ -14,14 +14,14 @@ class URLTest {
     @DisplayName("port 를 지정해서 URL 객체를 생성할 수 있다.")
     void constructorTest_parameters_portExists() {
         URL url = URL.builder()
-                .urlKey("ABCDEFG")
+                .key("ABCDEFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
                 .build();
 
-        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
+        assertThat(url.getKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(443);
@@ -33,14 +33,14 @@ class URLTest {
     @DisplayName("port 가 없이 URL 객체를 생성할 수 있다.")
     void constructorTest_parameters_portNotExists() {
         URL url = URL.builder()
-                .urlKey("ABCDEFG")
+                .key("ABCDEFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(null)
                 .path("/")
                 .build();
 
-        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
+        assertThat(url.getKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(443);
@@ -52,14 +52,14 @@ class URLTest {
     @DisplayName("path 를 지정해서 URL 객체를 생성할 수 있다.")
     void constructorTest_parameters_pathExists() {
         URL url = URL.builder()
-                .urlKey("ABCDEFG")
+                .key("ABCDEFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(null)
                 .path("/")
                 .build();
 
-        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
+        assertThat(url.getKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(443);
@@ -71,14 +71,14 @@ class URLTest {
     @DisplayName("path 가 없이 URL 객체를 생성할 수 있다.")
     void constructorTest_parameters_pathNotExists() {
         URL url = URL.builder()
-                .urlKey("ABCDEFG")
+                .key("ABCDEFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(null)
                 .path(null)
                 .build();
 
-        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
+        assertThat(url.getKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("https");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(443);
@@ -131,7 +131,7 @@ class URLTest {
     void constructorTest_originalString_portExists() {
         URL url = new URL("ABCDEFG", "http://four.days:8080/");
 
-        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
+        assertThat(url.getKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("http");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(8080);
@@ -143,7 +143,7 @@ class URLTest {
     @DisplayName("port 가 없이 URL 객체를 생성할 수 있다.")
     void constructorTest_originalString_portNotExists() {
         URL httpUrl = new URL("ABCDEFG1", "http://four.days/");
-        assertThat(httpUrl.getUrlKey()).isEqualTo("ABCDEFG1");
+        assertThat(httpUrl.getKey()).isEqualTo("ABCDEFG1");
         assertThat(httpUrl.getProtocol()).isEqualTo("http");
         assertThat(httpUrl.getDomain()).isEqualTo("four.days");
         assertThat(httpUrl.getPort()).isEqualTo(80);
@@ -151,7 +151,7 @@ class URLTest {
         assertThat(httpUrl.getOriginal()).isEqualTo("http://four.days/");
 
         URL httpsUrl = new URL("ABCDEFG2", "https://four.days/");
-        assertThat(httpsUrl.getUrlKey()).isEqualTo("ABCDEFG2");
+        assertThat(httpsUrl.getKey()).isEqualTo("ABCDEFG2");
         assertThat(httpsUrl.getProtocol()).isEqualTo("https");
         assertThat(httpsUrl.getDomain()).isEqualTo("four.days");
         assertThat(httpsUrl.getPort()).isEqualTo(443);
@@ -164,7 +164,7 @@ class URLTest {
     void constructorTest_originalString_pathExists() {
         URL url = new URL("ABCDEFG", "http://four.days/");
 
-        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
+        assertThat(url.getKey()).isEqualTo("ABCDEFG");
         assertThat(url.getProtocol()).isEqualTo("http");
         assertThat(url.getDomain()).isEqualTo("four.days");
         assertThat(url.getPort()).isEqualTo(80);
@@ -182,7 +182,7 @@ class URLTest {
         assertThat(url.getPort()).isEqualTo(80);
         assertThat(url.getPath()).isEmpty();
         assertThat(url.getOriginal()).isEqualTo("http://four.days");
-        assertThat(url.getUrlKey()).isEqualTo("ABCDEFG");
+        assertThat(url.getKey()).isEqualTo("ABCDEFG");
     }
 
     @Test
@@ -218,90 +218,90 @@ class URLTest {
     }
 
     @Test
-    @DisplayName("urlKey 없이 URL 객체를 생성할 수 없다.")
-    void constructorTest_parameter_urlKeyIsNull() {
+    @DisplayName("key 없이 URL 객체를 생성할 수 없다.")
+    void constructorTest_parameter_keyIsNull() {
         assertThatThrownBy(() -> URL.builder()
-                .urlKey(null)
+                .key(null)
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
                 .build())
-                .isInstanceOf(InvalidUrlKeyException.class)
-                .hasMessage("urlKey is invalid. urlKey=null");
+                .isInstanceOf(InvalidKeyException.class)
+                .hasMessage("key is invalid. key=null");
     }
 
     @Test
-    @DisplayName("urlKey 없이 URL 객체를 생성할 수 없다.")
-    void constructorTest_originalString_urlKeyIsNull() {
+    @DisplayName("key 없이 URL 객체를 생성할 수 없다.")
+    void constructorTest_originalString_keyIsNull() {
         assertThatThrownBy(() -> new URL(null, "https://four.days:443/hello"))
-                .isInstanceOf(InvalidUrlKeyException.class)
-                .hasMessage("urlKey is invalid. urlKey=null");
+                .isInstanceOf(InvalidKeyException.class)
+                .hasMessage("key is invalid. key=null");
     }
 
     @Test
-    @DisplayName("urlKey 는 '/' 문자를 포함할 수 없다.")
-    void constructorTest_parameter_urlKeyContainsSlash() {
+    @DisplayName("key 는 '/' 문자를 포함할 수 없다.")
+    void constructorTest_parameter_keyContainsSlash() {
         assertThatThrownBy(() -> URL.builder()
-                .urlKey("ABCD/EFG")
+                .key("ABCD/EFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
                 .build())
-                .isInstanceOf(InvalidUrlKeyException.class)
-                .hasMessage("urlKey is invalid. urlKey=ABCD/EFG");
+                .isInstanceOf(InvalidKeyException.class)
+                .hasMessage("key is invalid. key=ABCD/EFG");
     }
 
     @Test
-    @DisplayName("urlKey 는 '/' 문자를 포함할 수 없다.")
-    void constructorTest_originalString_urlKeyContainsSlash() {
+    @DisplayName("key 는 '/' 문자를 포함할 수 없다.")
+    void constructorTest_originalString_keyContainsSlash() {
         assertThatThrownBy(() -> new URL("ABCD/EFG", "https://four.days:443/hello"))
-                .isInstanceOf(InvalidUrlKeyException.class)
-                .hasMessage("urlKey is invalid. urlKey=ABCD/EFG");
+                .isInstanceOf(InvalidKeyException.class)
+                .hasMessage("key is invalid. key=ABCD/EFG");
     }
 
     @Test
-    @DisplayName("urlKey 는 '+' 문자를 포함할 수 없다.")
-    void constructorTest_parameter_urlKeyContainsPlus() {
+    @DisplayName("key 는 '+' 문자를 포함할 수 없다.")
+    void constructorTest_parameter_keyContainsPlus() {
         assertThatThrownBy(() -> URL.builder()
-                .urlKey("ABCD+EFG")
+                .key("ABCD+EFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
                 .build())
-                .isInstanceOf(InvalidUrlKeyException.class)
-                .hasMessage("urlKey is invalid. urlKey=ABCD+EFG");
+                .isInstanceOf(InvalidKeyException.class)
+                .hasMessage("key is invalid. key=ABCD+EFG");
     }
 
     @Test
-    @DisplayName("urlKey 는 '+' 문자를 포함할 수 없다.")
-    void constructorTest_originalString_urlKeyContainsPlus() {
+    @DisplayName("key 는 '+' 문자를 포함할 수 없다.")
+    void constructorTest_originalString_keyContainsPlus() {
         assertThatThrownBy(() -> new URL("ABCD+EFG", "https://four.days:443/hello"))
-                .isInstanceOf(InvalidUrlKeyException.class)
-                .hasMessage("urlKey is invalid. urlKey=ABCD+EFG");
+                .isInstanceOf(InvalidKeyException.class)
+                .hasMessage("key is invalid. key=ABCD+EFG");
     }
 
     @Test
-    @DisplayName("urlKey 는 '=' 문자를 포함할 수 없다.")
-    void constructorTest_parameter_urlKeyContainsEqual() {
+    @DisplayName("key 는 '=' 문자를 포함할 수 없다.")
+    void constructorTest_parameter_keyContainsEqual() {
         assertThatThrownBy(() -> URL.builder()
-                .urlKey("ABCD=EFG")
+                .key("ABCD=EFG")
                 .protocol("https")
                 .domain("four.days")
                 .port(443)
                 .path("/")
                 .build())
-                .isInstanceOf(InvalidUrlKeyException.class)
-                .hasMessage("urlKey is invalid. urlKey=ABCD=EFG");
+                .isInstanceOf(InvalidKeyException.class)
+                .hasMessage("key is invalid. key=ABCD=EFG");
     }
 
     @Test
-    @DisplayName("urlKey 는 '=' 문자를 포함할 수 없다.")
-    void constructorTest_originalString_urlKeyContainsEqual() {
+    @DisplayName("key 는 '=' 문자를 포함할 수 없다.")
+    void constructorTest_originalString_keyContainsEqual() {
         assertThatThrownBy(() -> new URL("ABCD=EFG", "https://four.days:443/hello"))
-                .isInstanceOf(InvalidUrlKeyException.class)
-                .hasMessage("urlKey is invalid. urlKey=ABCD=EFG");
+                .isInstanceOf(InvalidKeyException.class)
+                .hasMessage("key is invalid. key=ABCD=EFG");
     }
 }
