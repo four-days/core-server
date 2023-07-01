@@ -10,7 +10,9 @@ import java.util.Optional;
 @Getter
 public class URL {
 
-    private final String urlKey;
+    private Long seq;
+
+    private final String key;
 
     private final String protocol;
 
@@ -24,19 +26,19 @@ public class URL {
 
 
     @Builder
-    public URL(String urlKey, String protocol, String domain, Integer port, String path) {
+    public URL(String key, String protocol, String domain, Integer port, String path) {
         this.protocol = protocol;
         this.domain = domain;
         this.port = port != null ? port : getPortByProtocol();
         this.path = Optional.ofNullable(path);
-        this.urlKey = urlKey;
+        this.key = key;
         this.original = createOriginal(protocol, domain, port, path);
 
         validateData();
     }
 
-    public URL(String urlKey, String original) {
-        this.urlKey = urlKey;
+    public URL(String key, String original) {
+        this.key = key;
 
         String[] protocolAndRest = original.split("://");
         this.protocol = protocolAndRest[0];
@@ -78,7 +80,7 @@ public class URL {
         validateDomain();
         validatePort();
         validatePath();
-        validateUrlKey();
+        validateKey();
     }
 
     private void validateProtocol() {
@@ -113,12 +115,12 @@ public class URL {
         throw new InvalidPathException("path is invalid. path=" + this.path.get());
     }
 
-    private void validateUrlKey() {
-        if (StringUtils.hasText(this.urlKey) && !urlKey.contains("/") && !urlKey.contains("=") && !urlKey.contains("+")) {
+    private void validateKey() {
+        if (StringUtils.hasText(this.key) && !key.contains("/") && !key.contains("=") && !key.contains("+")) {
             return;
         }
 
-        throw new InvalidUrlKeyException("urlKey is invalid. urlKey=" + this.urlKey);
+        throw new InvalidKeyException("key is invalid. key=" + this.key);
     }
 
     private String createOriginal(String protocol, String domain, Integer port, String path) {

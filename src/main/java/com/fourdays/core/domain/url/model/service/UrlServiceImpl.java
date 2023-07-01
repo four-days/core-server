@@ -16,14 +16,14 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public String shortenUrl(String originalUrl) {
-        String urlKey = base62Encoder.encode();
-        return urlRepository.save(new URL(urlKey, originalUrl))
-                .getUrlKey();
+        String key = base62Encoder.encode();
+        return urlRepository.save(new URL(key, originalUrl))
+                .getKey();
     }
 
     @Override
-    public String findOriginalUrlByUrlKey(String urlKey) {
-        URL findUrl = urlRepository.findByUrlKey(urlKey)
+    public String findOriginalUrlByKey(String key) {
+        URL findUrl = urlRepository.findByKey(key)
                 .orElse(null);
 
         return findUrl == null ? null : findUrl.getOriginal();
