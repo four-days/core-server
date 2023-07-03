@@ -1,8 +1,8 @@
 package com.fourdays.core.common.exception.handler;
 
 import com.fourdays.core.common.response.ErrorResponse;
-import com.fourdays.core.domain.url.model.entity.exception.InvalidException;
-import com.fourdays.core.domain.url.model.entity.exception.InvalidPathException;
+import com.fourdays.core.domain.url.entity.exception.InvalidException;
+import com.fourdays.core.domain.url.entity.exception.InvalidPathException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
