@@ -7,7 +7,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -15,7 +14,7 @@ public class URL {
 
     private Long seq;
 
-    private final String key;
+    private final String urlKey;
 
     private final Protocol protocol;
 
@@ -23,7 +22,7 @@ public class URL {
 
     private final Integer port;
 
-    private final Optional<String> path;
+    private final String path;
 
     private final String original;
 
@@ -31,19 +30,19 @@ public class URL {
 
 
     @Builder
-    public URL(String key, Protocol protocol, String domain, Integer port, String path) {
+    public URL(String urlKey, Protocol protocol, String domain, Integer port, String path) {
         this.protocol = protocol;
         this.domain = domain;
         this.port = port != null ? port : getPortByProtocol();
-        this.path = Optional.ofNullable(path);
-        this.key = key;
+        this.path = path;
+        this.urlKey = urlKey;
 
         validateData();
         this.original = createOriginal();
     }
 
-    public URL(String key, Protocol protocol, String originalUrl) {
-        this.key = key;
+    public URL(String urlKey, Protocol protocol, String originalUrl) {
+        this.urlKey = urlKey;
         this.protocol = protocol;
 
         String[] split = originalUrl.split("://");
@@ -70,9 +69,9 @@ public class URL {
         }
 
         if (pathIndex > 0) {
-            this.path = Optional.of(split[1].substring(pathIndex));
+            this.path = split[1].substring(pathIndex);
         } else {
-            this.path = Optional.empty();
+            this.path = null;
         }
 
         this.original = originalUrl;
@@ -84,7 +83,7 @@ public class URL {
         validateDomain();
         validatePort();
         validatePath();
-        validateKey();
+        validateUrlKey();
     }
 
     private void validateProtocol() {
@@ -114,19 +113,19 @@ public class URL {
     }
 
     private void validatePath() {
-        if (this.path.isEmpty() || this.path.get().startsWith("/")) {
+        if (this.path == null || this.path.startsWith("/")) {
             return;
         }
 
-        throw new InvalidPathException("path is invalid. path=" + this.path.get());
+        throw new InvalidPathException("path is invalid. path=" + this.path);
     }
 
-    private void validateKey() {
-        if (StringUtils.hasText(this.key) && !key.contains("/") && !key.contains("=") && !key.contains("+")) {
+    private void validateUrlKey() {
+        if (StringUtils.hasText(this.urlKey) && !urlKey.contains("/") && !urlKey.contains("=") && !urlKey.contains("+")) {
             return;
         }
 
-        throw new InvalidKeyException("key is invalid. key=" + this.key);
+        throw new InvalidUrlKeyException("urlKey is invalid. urlKey=" + this.urlKey);
     }
 
     private String createOriginal() {
@@ -135,7 +134,7 @@ public class URL {
         urlBuilder.append("://");
         urlBuilder.append(this.domain);
         urlBuilder.append(this.port != null ? ":" + this.port : "");
-        urlBuilder.append(this.path.orElse(""));
+        urlBuilder.append(this.path == null ? "" : this.path);
         return urlBuilder.toString();
     }
 

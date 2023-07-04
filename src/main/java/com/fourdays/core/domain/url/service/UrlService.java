@@ -4,5 +4,5 @@ public interface UrlService {
 
     String shortenUrl(String url);
 
-    String findOriginalUrlByKey(String key);
+    String findOriginalUrlByUrlKey(String key);
 }

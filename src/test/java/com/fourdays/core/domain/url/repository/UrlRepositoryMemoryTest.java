@@ -2,9 +2,7 @@ package com.fourdays.core.domain.url.repository;
 
 import com.fourdays.core.domain.url.entity.Protocol;
 import com.fourdays.core.domain.url.entity.URL;
-import com.fourdays.core.domain.url.entity.exception.InvalidKeyException;
-import com.fourdays.core.domain.url.repository.UrlRepository;
-import com.fourdays.core.domain.url.repository.UrlRepositoryMemory;
+import com.fourdays.core.domain.url.entity.exception.InvalidUrlKeyException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +27,7 @@ class UrlRepositoryMemoryTest {
     void saveTest_success() {
         Protocol https = new Protocol(1, "HTTPS");
         URL url = URL.builder()
-                .key("ABCDEFG")
+                .urlKey("ABCDEFG")
                 .protocol(https)
                 .domain("four.days")
                 .port(443)
@@ -41,11 +39,11 @@ class UrlRepositoryMemoryTest {
     }
 
     @Test
-    @DisplayName("key 는 null 이어서는 안 된다.")
-    void saveTest_keyIsNull() throws IllegalAccessException, NoSuchFieldException {
+    @DisplayName("urlKey 는 null 이어서는 안 된다.")
+    void saveTest_urlKeyIsNull() throws IllegalAccessException, NoSuchFieldException {
         Protocol https = new Protocol(1, "HTTPS");
         URL url = URL.builder()
-                .key("null")
+                .urlKey("null")
                 .protocol(https)
                 .domain("four.days")
                 .port(443)
@@ -53,21 +51,21 @@ class UrlRepositoryMemoryTest {
                 .build();
 
         Class<URL> urlClass = URL.class;
-        Field keyField = urlClass.getDeclaredField("key");
-        keyField.setAccessible(true);
-        keyField.set(url, null);
+        Field urlKeyField = urlClass.getDeclaredField("urlKey");
+        urlKeyField.setAccessible(true);
+        urlKeyField.set(url, null);
 
         assertThatThrownBy(() -> urlRepository.save(url))
-                .isInstanceOf(InvalidKeyException.class)
-                .hasMessage("key is invalid. key=" + null);
+                .isInstanceOf(InvalidUrlKeyException.class)
+                .hasMessage("urlKey is invalid. urlKey=" + null);
     }
 
     @Test
-    @DisplayName("key 는 빈 문자열이어서는 안 된다.")
-    void saveTest_keyIsEmpty() throws IllegalAccessException, NoSuchFieldException {
+    @DisplayName("urlKey 는 빈 문자열이어서는 안 된다.")
+    void saveTest_urlKeyIsEmpty() throws IllegalAccessException, NoSuchFieldException {
         Protocol https = new Protocol(1, "HTTPS");
         URL url = URL.builder()
-                .key("temp")
+                .urlKey("temp")
                 .protocol(https)
                 .domain("four.days")
                 .port(443)
@@ -75,21 +73,21 @@ class UrlRepositoryMemoryTest {
                 .build();
 
         Class<URL> urlClass = URL.class;
-        Field keyField = urlClass.getDeclaredField("key");
-        keyField.setAccessible(true);
-        keyField.set(url, "");
+        Field urlKeyField = urlClass.getDeclaredField("urlKey");
+        urlKeyField.setAccessible(true);
+        urlKeyField.set(url, "");
 
         assertThatThrownBy(() -> urlRepository.save(url))
-                .isInstanceOf(InvalidKeyException.class)
-                .hasMessage("key is invalid. key=");
+                .isInstanceOf(InvalidUrlKeyException.class)
+                .hasMessage("urlKey is invalid. urlKey=");
     }
 
     @Test
-    @DisplayName("key 로 URL 객체를 조회할 수 있다.")
+    @DisplayName("urlKey 로 URL 객체를 조회할 수 있다.")
     void findByKeyTest_exists() {
         Protocol https = new Protocol(1, "HTTPS");
         URL url = URL.builder()
-                .key("key")
+                .urlKey("urlKey")
                 .protocol(https)
                 .domain("four.days")
                 .port(443)
@@ -97,7 +95,7 @@ class UrlRepositoryMemoryTest {
                 .build();
         urlRepository.save(url);
 
-        Optional<URL> optionalUrl = urlRepository.findByKey("key");
+        Optional<URL> optionalUrl = urlRepository.findByUrlKey("urlKey");
         assertThat(optionalUrl).isNotEmpty();
 
         URL findUrl = optionalUrl.orElseThrow();
@@ -105,9 +103,9 @@ class UrlRepositoryMemoryTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 key 로 URL 객체를 조회하면 빈 Optional 객체가 반환된다.")
+    @DisplayName("존재하지 않는 urlKey 로 URL 객체를 조회하면 빈 Optional 객체가 반환된다.")
     void findByKeyTest_notExists() {
-        Optional<URL> empty = urlRepository.findByKey("none");
+        Optional<URL> empty = urlRepository.findByUrlKey("none");
         assertThat(empty).isEmpty();
     }
 }

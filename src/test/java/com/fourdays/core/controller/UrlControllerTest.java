@@ -42,16 +42,16 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("url 을 전달하면 url 이 단축된 key 값이 반환된다.")
+    @DisplayName("url 을 전달하면 url 이 단축된 urlKey 값이 반환된다.")
     void shortenUrlTest_apiTest_success() throws Exception {
-        Mockito.when(urlService.shortenUrl("https://four.days/")).thenReturn("key");
+        Mockito.when(urlService.shortenUrl("https://four.days/")).thenReturn("urlKey");
         mvc.perform(post("/api/v1/urls")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .content("{\"url\" : \"https://four.days/\"}"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.data.key").value("key"));
+                .andExpect(jsonPath("$.data.urlKey").value("urlKey"));
     }
 
     @Test
@@ -146,10 +146,10 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("key 로 원본 url 을 조회할 수 있다.")
+    @DisplayName("urlKey 로 원본 url 을 조회할 수 있다.")
     void findOriginalUrlByKeyTest_exists() throws Exception {
-        Mockito.when(urlService.findOriginalUrlByKey("key12345")).thenReturn("https://four.days/");
-        mvc.perform(get("/api/v1/urls/key12345")
+        Mockito.when(urlService.findOriginalUrlByUrlKey("urlKey12")).thenReturn("https://four.days/");
+        mvc.perform(get("/api/v1/urls/urlKey12")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isOk())
@@ -157,143 +157,143 @@ class UrlControllerTest {
     }
 
     @Test
-    @DisplayName("유효하지 않은 key 로는 원본 url 을 조회할 수 없다.")
+    @DisplayName("유효하지 않은 urlKey 로는 원본 url 을 조회할 수 없다.")
     void findOriginalUrlByKeyTest_notExists() throws Exception {
-        mvc.perform(get("/api/v1/urls/key12345")
+        mvc.perform(get("/api/v1/urls/urlKey12")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @DisplayName("8자리의 key 를 전달해야 한다. key 길이 = 1")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 1")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_lengthIs1() throws Exception {
         mvc.perform(get("/api/v1/urls/1")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("1"));
     }
 
     @Test
-    @DisplayName("8자리의 key 를 전달해야 한다. key 길이 = 2")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 2")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_lengthIs2() throws Exception {
         mvc.perform(get("/api/v1/urls/12")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("12"));
     }
 
     @Test
-    @DisplayName("8자리의 key 를 전달해야 한다. key 길이 = 3")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 3")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_lengthIs3() throws Exception {
         mvc.perform(get("/api/v1/urls/123")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("123"));
     }
 
     @Test
-    @DisplayName("8자리의 key 를 전달해야 한다. key 길이 = 4")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 4")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_lengthIs4() throws Exception {
         mvc.perform(get("/api/v1/urls/1234")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("1234"));
     }
 
     @Test
-    @DisplayName("8자리의 key 를 전달해야 한다. key 길이 = 5")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 5")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_lengthIs5() throws Exception {
         mvc.perform(get("/api/v1/urls/12345")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("12345"));
     }
 
     @Test
-    @DisplayName("8자리의 key 를 전달해야 한다. key 길이 = 6")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 6")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_lengthIs6() throws Exception {
         mvc.perform(get("/api/v1/urls/123456")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("123456"));
     }
 
     @Test
-    @DisplayName("8자리의 key 를 전달해야 한다. key 길이 = 7")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 7")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_lengthIs7() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("1234567"));
     }
 
     @Test
-    @DisplayName("8자리의 key 를 전달해야 한다. key 길이 = 9")
+    @DisplayName("8자리의 urlKey 를 전달해야 한다. urlKey 길이 = 9")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_lengthIs9() throws Exception {
         mvc.perform(get("/api/v1/urls/123456789")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("123456789"));
     }
 
     @Test
-    @DisplayName("key 는 알파벳, 숫자만 입력해야 한다. '-'")
+    @DisplayName("urlKey 는 알파벳, 숫자만 입력해야 한다. '-'")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_invalidWord1() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567-")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("1234567-"));
     }
 
     @Test
-    @DisplayName("key 는 알파벳, 숫자만 입력해야 한다. '+'")
+    @DisplayName("urlKey 는 알파벳, 숫자만 입력해야 한다. '+'")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_invalidWord2() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567+")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("1234567+"));
     }
 
     @Test
-    @DisplayName("key 는 알파벳, 숫자만 입력해야 한다. '='")
+    @DisplayName("urlKey 는 알파벳, 숫자만 입력해야 한다. '='")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_invalidWord3() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567=")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("1234567="));
     }
 
     @Test
-    @DisplayName("key 는 알파벳, 숫자만 입력해야 한다. '\\'")
+    @DisplayName("urlKey 는 알파벳, 숫자만 입력해야 한다. '\\'")
     void findOriginalUrlByKeyTest_constraintViolationExceptionException_invalidWord4() throws Exception {
         mvc.perform(get("/api/v1/urls/1234567\\")
-        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data[0].message").value("invalid key"))
+                .andExpect(jsonPath("$.data[0].message").value("invalid urlKey"))
                 .andExpect(jsonPath("$.data[0].invalidValue").value("1234567\\"));
     }
 }
