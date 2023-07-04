@@ -3,7 +3,6 @@ package com.fourdays.core.domain.url.service;
 import com.fourdays.core.domain.url.entity.Protocol;
 import com.fourdays.core.domain.url.entity.URL;
 import com.fourdays.core.domain.url.entity.exception.InvalidProtocolException;
-import com.fourdays.core.domain.url.repository.ProtocolRepository;
 import com.fourdays.core.domain.url.repository.UrlRepository;
 import com.fourdays.core.domain.url.util.Base62Encoder;
 import lombok.RequiredArgsConstructor;
@@ -17,19 +16,19 @@ public class UrlServiceImpl implements UrlService {
 
     private final UrlRepository urlRepository;
 
-    private final ProtocolRepository protocolRepository;
+    private final ProtocolService protocolService;
 
     @Override
     public String shortenUrl(String originalUrl) {
         String key = base62Encoder.encode();
         Protocol protocol = getProtocol(originalUrl);
         return urlRepository.save(new URL(key, protocol, originalUrl))
-                .getKey();
+                .getUrlKey();
     }
 
     @Override
-    public String findOriginalUrlByKey(String key) {
-        URL findUrl = urlRepository.findByKey(key)
+    public String findOriginalUrlByUrlKey(String key) {
+        URL findUrl = urlRepository.findByUrlKey(key)
                 .orElse(null);
 
         return findUrl == null ? null : findUrl.getOriginal();
@@ -37,7 +36,7 @@ public class UrlServiceImpl implements UrlService {
 
     private Protocol getProtocol(String url) {
         String protocolName = parseProtocol(url);
-        return protocolRepository.findByName(protocolName)
+        return protocolService.findByName(protocolName)
                 .orElseThrow(() -> new InvalidProtocolException("protocol does not exist. parsed protocol name=" + protocolName));
     }
 

@@ -8,5 +8,5 @@ public interface UrlRepository {
 
     URL save(URL url);
 
-    Optional<URL> findByKey(String key);
+    Optional<URL> findByUrlKey(String key);
 }
