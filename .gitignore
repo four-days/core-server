@@ -1,5 +1,6 @@
 ### CUSTOM ###
 htmlReport
+*.log
 
 ### DEFAULT ###
 
