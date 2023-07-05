@@ -1,9 +1,10 @@
 package com.fourdays.core.common.exception.handler;
 
+import com.fourdays.core.common.exception.InvalidException;
 import com.fourdays.core.common.response.ErrorResponse;
-import com.fourdays.core.domain.url.entity.exception.InvalidException;
-import com.fourdays.core.domain.url.entity.exception.InvalidPathException;
+import com.fourdays.core.url.exception.InvalidPathException;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -18,7 +19,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 
+@Slf4j
 @RestControllerAdvice
 public class CommonRestControllerAdvice {
 
@@ -65,6 +68,15 @@ public class CommonRestControllerAdvice {
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(InvalidException.class)
     public ErrorResponse<String> invalidExceptionHandler(InvalidPathException e) {
+        return ErrorResponse.<String>builder()
+                .data(e.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(SERVICE_UNAVAILABLE)
+    @ExceptionHandler(Exception.class)
+    public ErrorResponse<String> exceptionHandler(Exception e) {
+        log.error("error=", e);
         return ErrorResponse.<String>builder()
                 .data(e.getMessage())
                 .build();
