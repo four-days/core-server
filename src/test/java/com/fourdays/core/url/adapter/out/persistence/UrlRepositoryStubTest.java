@@ -14,13 +14,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class UrlRepositoryMemoryTest {
+class UrlRepositoryStubTest {
 
     private UrlRepository urlRepository;
 
     @BeforeEach
     void setUp() {
-        urlRepository = new UrlRepositoryMemory();
+        urlRepository = new UrlRepositoryStub();
     }
 
     @Test

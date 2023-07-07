@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class UrlRepositoryMemory implements UrlRepository {
+public class UrlRepositoryStub implements UrlRepository {
 
     private final Map<String, URL> store;
 
-    public UrlRepositoryMemory() {
+    public UrlRepositoryStub() {
         this.store = new HashMap<>();
     }
 
