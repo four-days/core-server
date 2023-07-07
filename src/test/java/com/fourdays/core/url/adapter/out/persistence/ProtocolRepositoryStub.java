@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class ProtocolRepositoryMemory implements ProtocolRepository {
+public class ProtocolRepositoryStub implements ProtocolRepository {
 
     private final Map<String, Protocol> storeByName;
 
-    public ProtocolRepositoryMemory() {
+    public ProtocolRepositoryStub() {
         this.storeByName = new HashMap<>() {{
             put("HTTP", new Protocol(1, "HTTP"));
             put("HTTPS", new Protocol(2, "HTTPS"));
