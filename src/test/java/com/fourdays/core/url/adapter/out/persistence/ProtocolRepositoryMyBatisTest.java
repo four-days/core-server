@@ -36,4 +36,12 @@ class ProtocolRepositoryMyBatisTest {
         assertThat(optionalProtocol).isNotEmpty();
         assertThat(optionalProtocol.get().getName()).isEqualTo(newProtocol.getName());
     }
+
+    @Test
+    @DisplayName("존재하지 않는 프로토콜명으로 조회하면 빈 Optional이 반환된다.")
+    void emptyTest() {
+        Optional<Protocol> optionalProtocol = protocolRepository.findByName("None");
+
+        assertThat(optionalProtocol).isEmpty();
+    }
 }
