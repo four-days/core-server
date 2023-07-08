@@ -6,5 +6,7 @@ import java.util.Optional;
 
 public interface ProtocolRepository {
 
+    Protocol save(Protocol protocol);
+
     Optional<Protocol> findByName(String name);
 }

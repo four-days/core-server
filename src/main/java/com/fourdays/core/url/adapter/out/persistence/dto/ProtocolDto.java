@@ -1,6 +1,7 @@
 package com.fourdays.core.url.adapter.out.persistence.dto;
 
 import com.fourdays.core.url.domain.Protocol;
+import lombok.Builder;
 
 import java.util.Objects;
 
@@ -10,6 +11,7 @@ public class ProtocolDto {
 
     private final String name;
 
+    @Builder
     public ProtocolDto(Integer seq, String name) {
         this.seq = seq;
         this.name = name;
@@ -27,6 +29,12 @@ public class ProtocolDto {
         return Protocol.builder()
                 .seq(seq)
                 .name(name)
+                .build();
+    }
+
+    public static ProtocolDto of(Protocol protocol) {
+        return ProtocolDto.builder()
+                .name(protocol.getName())
                 .build();
     }
 
