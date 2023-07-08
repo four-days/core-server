@@ -4,7 +4,7 @@
 
 <mapper namespace="com.fourdays.core.url.adapter.out.persistence.ProtocolMapper">
 
-    <insert id="save" parameterType="java.lang.String">
+    <insert id="save" parameterType="com.fourdays.core.url.adapter.out.persistence.dto.ProtocolDto">
         INSERT INTO tb_protocol (name)
         VALUES (#{name})
     </insert>

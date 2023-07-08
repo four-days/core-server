@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ProtocolMapper {
 
-    int save(String name);
+    int save(ProtocolDto protocolDto);
 
     ProtocolDto findBySeq(Integer seq);
 
