@@ -19,6 +19,11 @@ public class ProtocolRepositoryStub implements ProtocolRepository {
     }
 
     @Override
+    public Protocol save(Protocol protocol) {
+        return storeByName.put(protocol.getName(), protocol);
+    }
+
+    @Override
     public Optional<Protocol> findByName(String name) {
         return Optional.ofNullable(storeByName.get(name.toUpperCase()));
     }
