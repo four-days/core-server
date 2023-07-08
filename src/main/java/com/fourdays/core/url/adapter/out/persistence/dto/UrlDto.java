@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class UrlDto {
 
-    private Long seq;
+    private final Long seq;
 
     private final String urlKey;
 
