@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -39,6 +40,22 @@ public class URL {
 
         validateData();
         this.original = createOriginal();
+    }
+
+    @Builder(builderMethodName = "builderByDto")
+    public URL(Long seq, String urlKey, Protocol protocol, String domain, Integer port, String path, String original) {
+        if (seq == null) {
+            throw new IllegalStateException("seq is null");
+        }
+
+        this.seq = seq;
+        this.urlKey = urlKey;
+        this.protocol = protocol;
+        this.domain = domain;
+        this.port = port;
+        this.path = path;
+        this.original = original;
+        validateData();
     }
 
     public URL(String urlKey, Protocol protocol, String originalUrl) {
@@ -154,5 +171,31 @@ public class URL {
 
     private boolean isProtocolHttps() {
         return this.protocol.isHttps();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        URL url = (URL) o;
+        return Objects.equals(getSeq(), url.getSeq()) && Objects.equals(getUrlKey(), url.getUrlKey()) && Objects.equals(getProtocol(), url.getProtocol()) && Objects.equals(getDomain(), url.getDomain()) && Objects.equals(getPort(), url.getPort()) && Objects.equals(getPath(), url.getPath()) && Objects.equals(getOriginal(), url.getOriginal());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSeq(), getUrlKey(), getProtocol(), getDomain(), getPort(), getPath(), getOriginal());
+    }
+
+    @Override
+    public String toString() {
+        return "URL{" +
+                "seq=" + seq +
+                ", urlKey='" + urlKey + '\'' +
+                ", protocol=" + protocol +
+                ", domain='" + domain + '\'' +
+                ", port=" + port +
+                ", path='" + path + '\'' +
+                ", original='" + original + '\'' +
+                '}';
     }
 }
