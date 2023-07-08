@@ -1,6 +1,7 @@
 package com.fourdays.core.common.config;
 
 import com.fourdays.core.url.adapter.out.persistence.ProtocolMapper;
+import com.fourdays.core.url.adapter.out.persistence.UrlMapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -15,7 +16,8 @@ import javax.sql.DataSource;
 
 @Configuration
 @MapperScan(basePackageClasses = {
-        ProtocolMapper.class
+        ProtocolMapper.class,
+        UrlMapper.class
 })
 public class MyBatisConfig {
 

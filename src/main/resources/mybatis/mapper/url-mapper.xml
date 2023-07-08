@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fourdays.core.url.adapter.out.persistence.UrlMapper">
+
+    <insert id="save" parameterType="com.fourdays.core.url.adapter.out.persistence.dto.UrlDto">
+        INSERT INTO tb_url (url_key,
+                            protocol_seq,
+                            domain,
+                            port,
+                            path,
+                            original)
+        VALUES (#{urlKey},
+                ${protocolSeq},
+                #{domain},
+                ${port},
+                #{path},
+                #{original})
+    </insert>
+
+    <select id="findByUrlKey" parameterType="java.lang.String">
+        <![CDATA[
+        SELECT *
+        FROM tb_url
+        WHERE url_key = #{urlKey}
+        ]]>
+    </select>
+</mapper>
