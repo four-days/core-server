@@ -17,7 +17,8 @@ public class ProtocolRepositoryMyBatis implements ProtocolRepository {
         ProtocolDto protocolDto = ProtocolDto.of(protocol);
         protocolMapper.save(protocolDto);
 
-        return null;
+        return protocolMapper.findByName(protocol.getName())
+                .toEntity();
     }
 
     @Override
