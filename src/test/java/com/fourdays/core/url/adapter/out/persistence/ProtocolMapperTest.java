@@ -22,25 +22,29 @@ class ProtocolMapperTest {
     @Test
     @DisplayName("프로토콜을 저장하고, name으로 프토토콜을 조회할 수 있다.")
     void saveTest() {
-        String name = "FTP";
-        protocolMapper.save(name);
+        ProtocolDto protocolDto = ProtocolDto.builder()
+                .name("FTP")
+                .build();
+        protocolMapper.save(protocolDto);
 
-        ProtocolDto protocolDto = protocolMapper.findByName(name);
+        ProtocolDto findProtocolDto = protocolMapper.findByName("FTP");
 
-        assertThat(protocolDto.getSeq()).isNotNull();
-        assertThat(protocolDto.getName()).isEqualTo("FTP");
+        assertThat(findProtocolDto.getSeq()).isNotNull();
+        assertThat(findProtocolDto.getName()).isEqualTo("FTP");
     }
 
     @Test
     @DisplayName("seq로 프로토콜을 조회할 수 있다.")
     void findBySeqTest() {
-        String name = "FTP";
-        protocolMapper.save(name);
+        ProtocolDto protocolDto = ProtocolDto.builder()
+                .name("FTP")
+                .build();
+        protocolMapper.save(protocolDto);
 
-        ProtocolDto protocolDto = protocolMapper.findByName(name);
-        int seq = protocolDto.getSeq();
+        ProtocolDto findProtocolDto = protocolMapper.findByName("FTP");
+        int seq = findProtocolDto.getSeq();
         ProtocolDto findBySeq = protocolMapper.findBySeq(seq);
 
-        assertThat(protocolDto).isEqualTo(findBySeq);
+        assertThat(findProtocolDto).isEqualTo(findBySeq);
     }
 }
