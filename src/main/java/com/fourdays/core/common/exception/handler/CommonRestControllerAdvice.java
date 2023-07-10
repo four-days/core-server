@@ -27,7 +27,7 @@ public class CommonRestControllerAdvice {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorResponse<Map<String, Object>> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+    public ErrorResponse<Map<String, Object>> exceptionHandler(MethodArgumentNotValidException e) {
         Map<String, Object> data = new HashMap<>();
 
         BindingResult bindingResult = e.getBindingResult();
@@ -52,7 +52,7 @@ public class CommonRestControllerAdvice {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public ErrorResponse<List<Map<String, Object>>> constraintViolationExceptionHandler(ConstraintViolationException e) {
+    public ErrorResponse<List<Map<String, Object>>> exceptionHandler(ConstraintViolationException e) {
         List<Map<String, Object>> data = e.getConstraintViolations().stream()
                 .map(constraintViolation -> Map.of(
                         "message", constraintViolation.getMessage(),
@@ -64,10 +64,25 @@ public class CommonRestControllerAdvice {
                 .build();
     }
 
-
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(InvalidException.class)
-    public ErrorResponse<String> invalidExceptionHandler(InvalidPathException e) {
+    public ErrorResponse<String> exceptionHandler(InvalidPathException e) {
+        return ErrorResponse.<String>builder()
+                .data(e.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(IllegalStateException.class)
+    public ErrorResponse<String> exceptionHandler(IllegalStateException e) {
+        return ErrorResponse.<String>builder()
+                .data(e.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErrorResponse<String> exceptionHandler(IllegalArgumentException e) {
         return ErrorResponse.<String>builder()
                 .data(e.getMessage())
                 .build();
