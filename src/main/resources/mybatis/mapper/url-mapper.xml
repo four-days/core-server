@@ -26,4 +26,9 @@
         WHERE url_key = #{urlKey}
         ]]>
     </select>
+
+    <delete id="removeAll">
+        DELETE FROM tb_url
+    </delete>
+
 </mapper>
