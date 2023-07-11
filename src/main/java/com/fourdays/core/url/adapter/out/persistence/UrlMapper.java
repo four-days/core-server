@@ -9,4 +9,6 @@ public interface UrlMapper {
     int save(UrlDto urlDto);
 
     UrlDto findByUrlKey(String urlKey);
+
+    int removeAll();
 }

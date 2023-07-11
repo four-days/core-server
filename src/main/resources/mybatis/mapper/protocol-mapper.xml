@@ -21,4 +21,8 @@
         WHERE name = #{name}
     </select>
 
+    <delete id="removeAll">
+        DELETE FROM tb_protocol
+    </delete>
+
 </mapper>
