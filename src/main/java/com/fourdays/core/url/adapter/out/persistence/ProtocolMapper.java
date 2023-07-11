@@ -11,4 +11,6 @@ public interface ProtocolMapper {
     ProtocolDto findBySeq(Integer seq);
 
     ProtocolDto findByName(String name);
+
+    int removeAll();
 }
